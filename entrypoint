@@ -8,7 +8,8 @@ ssl_dir="/opt/ssl"
 
 if [ ! "$SERVER_HOSTNAME" ]; then export SERVER_HOSTNAME=example.com; fi
 
-if [ "$START_LUM_IN_HTTPS" = true ] ; then
+if [ "$START_LUM_IN_HTTPS" = true ]
+then
   #If LDAP_TLS_CACERT is set then write it out as a file
   #and set up the LDAP client conf to use it.
 
@@ -49,9 +50,9 @@ if [ "$START_LUM_IN_HTTPS" = true ] ; then
 
     echo "Generating openssl configuration"
 
-    cat <<EoCertConf>$confout
-subjectAltName = DNS:${SERVER_HOSTNAME},IP:127.0.0.1
-extendedKeyUsage = serverAuth
+    cat << EoCertConf > $confout
+    subjectAltName = DNS:${SERVER_HOSTNAME},IP:127.0.0.1
+    extendedKeyUsage = serverAuth
 EoCertConf
 
     echo "Generating server key..."
@@ -82,7 +83,6 @@ EoCertConf
     if [ $? -ne 0 ]; then exit 1 ; fi
 
   fi
-  fi
 
   ########################
   #Create Apache config
@@ -90,27 +90,27 @@ EoCertConf
 
   if [ -f "/opt/tls/chain.pem" ]; then $ssl_chain="SSLCertificateChainFile /opt/tls/chain.pem"; fi
 
-  cat <<EoC >/etc/apache2/sites-enabled/lum.conf
+  cat << EOF > /etc/apache2/sites-enabled/lum.conf
 
-Listen 443
+  Listen 443
 
-<VirtualHost *:80>
+  <VirtualHost *:80>
 
- RewriteEngine On
- RewriteRule ^/?(.*) https://%{SERVER_NAME}/\$1 [R,L]
+  RewriteEngine On
+  RewriteRule ^/?(.*) https://%{SERVER_NAME}/\$1 [R,L]
 
-</VirtualHost>
+  </VirtualHost>
 
-<VirtualHost _default_:443>
+  <VirtualHost _default_:443>
 
- ServerName $SERVER_HOSTNAME
- DocumentRoot /opt/ldap_user_manager
+  ServerName $SERVER_HOSTNAME
+  DocumentRoot /opt/ldap_user_manager
 
- DirectoryIndex index.php index.html
+  DirectoryIndex index.php index.html
 
- <Directory /opt/ldap_user_manager>
-   Require all granted
- </Directory>
+  <Directory /opt/ldap_user_manager>
+    Require all granted
+    </Directory>
 
  SSLEngine On
  SSLCertificateFile /opt/ssl/server.crt
@@ -119,28 +119,28 @@ Listen 443
 
  php_value include_path "/opt/ldap_user_manager/includes"
 
-</VirtualHost>
-EoC
+ </VirtualHost>
+EOF
 else
-  cat <<EoC >/etc/apache2/sites-enabled/lum.conf
+  cat << EOF > /etc/apache2/sites-enabled/lum.conf
 
-Listen 80
+  Listen 80
 
-<VirtualHost _default_:80>
+  <VirtualHost _default_:80>
 
- ServerName $SERVER_HOSTNAME
- DocumentRoot /opt/ldap_user_manager
+  ServerName $SERVER_HOSTNAME
+  DocumentRoot /opt/ldap_user_manager
 
- DirectoryIndex index.php index.html
+  DirectoryIndex index.php index.html
 
- <Directory /opt/ldap_user_manager>
+  <Directory /opt/ldap_user_manager>
    Require all granted
- </Directory>
+  </Directory>
 
- php_value include_path "/opt/ldap_user_manager/includes"
+  php_value include_path "/opt/ldap_user_manager/includes"
 
-</VirtualHost>
-EoC
+  </VirtualHost>
+EOF
 fi
 ########################
 #Run Apache
