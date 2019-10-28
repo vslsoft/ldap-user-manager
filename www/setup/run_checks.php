@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 include_once __DIR__ . "/../includes/web_functions.inc.php";
 include_once __DIR__ . "/../includes/ldap_functions.inc.php";
-include_once __DIR__ . "/../includes/module_functions.inc.php";
+include_once __DIR__ . "/../account_manager/module_functions.inc.php";
 
 validate_setup_cookie();
 set_page_access("setup");
@@ -16,7 +16,7 @@ $ldap_connection = open_ldap_connection();
 ?>
 <script>
     $(document).ready(function(){
-     $('[data-toggle="popover"]').popover(); 
+     $('[data-toggle="popover"]').popover();
     });
 </script>
 <div class="form-group">
@@ -71,7 +71,7 @@ if ($group_result['count'] != 1) {
  print "<label class='pull-right'><input type='checkbox' name='setup_group_ou' class='pull-right' checked>Create?&nbsp;</label>";
  print "</li>\n";
  $show_finish_button = FALSE;
- 
+
 }
 else {
  print "$li_good The group OU (<strong>${LDAP['group_dn']}</strong>) is present.</li>";
@@ -90,7 +90,7 @@ if ($user_result['count'] != 1) {
  print "<label class='pull-right'><input type='checkbox' name='setup_user_ou' class='pull-right' checked>Create?&nbsp;</label>";
  print "</li>\n";
  $show_finish_button = FALSE;
- 
+
 }
 else {
  print "$li_good The user OU (<strong>${LDAP['user_dn']}</strong>) is present.</li>";
@@ -120,7 +120,7 @@ if ($gid_result['count'] != 1) {
  print "<label class='pull-right'><input type='checkbox' name='setup_last_gid' class='pull-right' checked>Create?&nbsp;</label>";
  print "</li>\n";
  $show_finish_button = FALSE;
- 
+
 }
 else {
  print "$li_good The <strong>lastGID</strong> entry is present.</li>";
@@ -140,7 +140,7 @@ if ($uid_result['count'] != 1) {
  print "<label class='pull-right'><input type='checkbox' name='setup_last_uid' class='pull-right' checked>Create?&nbsp;</label>";
  print "</li>\n";
  $show_finish_button = FALSE;
- 
+
 }
 else {
  print "$li_good The <strong>lastUID</strong> entry is present.</li>";
@@ -160,7 +160,7 @@ if ($defgroup_result['count'] != 1) {
  print "<label class='pull-right'><input type='checkbox' name='setup_default_group' class='pull-right' checked>Create?&nbsp;</label>";
  print "</li>\n";
  $show_finish_button = FALSE;
- 
+
 }
 else {
  print "$li_good The default user group (<strong>$DEFAULT_USER_GROUP</strong>) is present.</li>";
@@ -180,13 +180,13 @@ if ($adminsgroup_result['count'] != 1) {
  print "<label class='pull-right'><input type='checkbox' name='setup_admins_group' class='pull-right' checked>Create?&nbsp;</label>";
  print "</li>\n";
  $show_finish_button = FALSE;
- 
+
 }
 else {
  print "$li_good The LDAP account administrators group (<strong>${LDAP['admins_group']}</strong>) is present.</li>";
 
  $admins = ldap_get_group_members($ldap_connection,$LDAP['admins_group']);
- 
+
  if (count($admins) < 1) {
   print "$li_fail The LDAP administration group is empty. You can add an admin account in the next section.</li>";
   $show_finish_button = FALSE;
