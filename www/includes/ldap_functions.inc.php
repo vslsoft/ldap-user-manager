@@ -18,7 +18,7 @@ function open_ldap_connection() {
 
  ldap_set_option($ldap_connection, LDAP_OPT_PROTOCOL_VERSION, 3);
 
- 
+ /*
  if (!preg_match("/^ldaps:/", $LDAP['uri'])) {
 
   $tls_result = ldap_start_tls($ldap_connection);
@@ -40,6 +40,7 @@ function open_ldap_connection() {
    }
   }
  }
+ */
 
  $bind_result = ldap_bind( $ldap_connection, $LDAP['admin_bind_dn'], $LDAP['admin_bind_pwd']);
 
