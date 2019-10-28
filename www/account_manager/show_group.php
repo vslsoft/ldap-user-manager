@@ -2,7 +2,7 @@
 
 include_once __DIR__ . "/../includes/web_functions.inc.php";
 include_once __DIR__ . "/../includes/ldap_functions.inc.php";
-include_once __DIR__ . "/../includes/module_functions.inc.php";
+include_once __DIR__ . "/../account_manager/module_functions.inc.php";
 set_page_access("admin");
 
 render_header("LDAP manager");
@@ -88,7 +88,7 @@ if (isset($_POST["update_members"])) {
 
  $non_members = array_diff($all_people,$updated_membership);
  $group_members = $updated_membership;
- 
+
  ?>
   <script>
     window.setTimeout(function() {
@@ -99,9 +99,9 @@ if (isset($_POST["update_members"])) {
    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="TRUE">&times;</span></button>
    <strong>Success!</strong> The group has been updated.
   </div>
- 
+
  <?php
- 
+
 }
 else {
  $group_members = $current_members;
@@ -117,16 +117,16 @@ ldap_close($ldap_connection);
 
   var group_del_submit = document.getElementById('delete_group');
   group_del_submit.classList.replace('invisible','visible');
-  
-  
+
+
  }
 
- 
+
  function update_form_with_users() {
-  
+
   var members_form = document.getElementById('group_members');
   var member_list_ul = document.getElementById('membership_list');
-  
+
   var member_list = member_list_ul.getElementsByTagName("li");
 
   for (var i = 0; i < member_list.length; ++i) {
@@ -135,11 +135,11 @@ ldap_close($ldap_connection);
         hidden.name = i;
         hidden.value = member_list[i]['textContent'];
         members_form.appendChild(hidden);
-  
+
   }
-  
+
   members_form.submit();
- 
+
  }
 
  $(function () {
@@ -203,9 +203,9 @@ ldap_close($ldap_connection);
   .list-arrows button {
           margin-bottom: 20px;
   }
-  
-  .right_button { 
-    width: 200px; 
+
+  .right_button {
+    width: 200px;
     float: right;
   }
 </style>
@@ -221,10 +221,10 @@ ldap_close($ldap_connection);
    <form action="/<?php print $THIS_MODULE_PATH; ?>/groups.php" method="post"><input type="hidden" name="delete_group" value="<?php print $group_cn; ?>"><button class="btn btn-danger pull-right invisible" id="delete_group">Confirm deletion</button></form>
   </div>
   <div class="panel-body">
-  
+
 
    <div class="row">
- 
+
         <div class="dual-list list-left col-md-5">
          <strong>Members</strong>
          <div class="well">

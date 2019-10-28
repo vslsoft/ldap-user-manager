@@ -2,7 +2,7 @@
 
 include_once __DIR__ . "/../includes/web_functions.inc.php";
 include_once __DIR__ . "/../includes/ldap_functions.inc.php";
-include_once __DIR__ . "/../includes/module_functions.inc.php";
+include_once __DIR__ . "/../account_manager/module_functions.inc.php";
 set_page_access("admin");
 
 render_header();
@@ -52,33 +52,33 @@ exit(0);
 
 $ldap_search = ldap_search( $ldap_connection, $LDAP['base_dn'], "(${LDAP['account_attribute']}=$username)" );
 
- 
+
 if ($ldap_search) {
- 
+
  $user = ldap_get_entries($ldap_connection, $ldap_search);
 
 
  ################################################
- 
+
  ### Check for updates
 
  if (isset($_POST['update_account'])) {
 
   $to_update = array();
-  
+
   foreach ($attribute_map as $key => $value) {
 
    if ($user[0][$key][0] != $_POST[$key]) {
     $to_update[$key] = $_POST[$key];
     $user[0][$key][0] = $_POST[$key];
    }
-  
+
   }
 
   if (isset($_POST['password']) and $_POST['password'] != "") {
-    
+
     $password = $_POST['password'];
-    
+
     if (!is_numeric($_POST['pass_score']) or $_POST['pass_score'] < 3) { $weak_password = TRUE; }
     if (preg_match("/\"|'/",$password)) { $invalid_password = TRUE; }
     if ($_POST['password'] != $_POST['password_match']) { $mismatched_passwords = TRUE; }
@@ -147,15 +147,15 @@ if ($ldap_search) {
 
 
  $all_groups = ldap_get_group_list($ldap_connection);
- 
+
  $currently_member_of = array();
- 
+
  foreach ($all_groups as $this_group) {
   if (ldap_is_group_member($ldap_connection,$this_group,$username)) {
    array_push($currently_member_of,$this_group);
   }
  }
- 
+
  $not_member_of = array_diff($all_groups,$currently_member_of);
 
 
@@ -197,7 +197,7 @@ if ($ldap_search) {
    </div>
 
   <?php
- 
+
  }
  else {
   $member_of = $currently_member_of;
@@ -210,22 +210,22 @@ if ($ldap_search) {
 <script src="//cdnjs.cloudflare.com/ajax/libs/zxcvbn/1.0/zxcvbn.min.js"></script>
 <script type="text/javascript" src="/js/zxcvbn-bootstrap-strength-meter.js"></script>
 <script type="text/javascript">
- $(document).ready(function(){	
+ $(document).ready(function(){
    $("#StrengthProgressBar").zxcvbnProgressBar({ passwordInput: "#password" });
  });
 </script>
 <script type="text/javascript" src="/js/generate_passphrase.js"></script>
 <script type="text/javascript" src="/js/wordlist.js"></script>
 <script>
- 
+
  function show_delete_user_button() {
 
   group_del_submit = document.getElementById('delete_user');
   group_del_submit.classList.replace('invisible','visible');
-  
-  
+
+
  }
- 
+
  function check_passwords_match() {
 
    if (document.getElementById('password').value != document.getElementById('confirm').value ) {
@@ -239,23 +239,23 @@ if ($ldap_search) {
   }
 
  function random_password() {
-  
+
   generatePassword(4,'-','password','confirm');
   $("#StrengthProgressBar").zxcvbnProgressBar({ passwordInput: "#password" });
  }
- 
+
  function back_to_hidden(passwordField,confirmField) {
 
   var passwordField = document.getElementById(passwordField).type = 'password';
   var confirmField = document.getElementById(confirmField).type = 'password';
 
  }
- 
+
  function update_form_with_groups() {
-  
+
   var group_form = document.getElementById('update_with_groups');
   var group_list_ul = document.getElementById('member_of_list');
-  
+
   var group_list = group_list_ul.getElementsByTagName("li");
 
   for (var i = 0; i < group_list.length; ++i) {
@@ -264,11 +264,11 @@ if ($ldap_search) {
         hidden.name = i;
         hidden.value = group_list[i]['textContent'];
         group_form.appendChild(hidden);
-  
+
   }
-  
+
   group_form.submit();
- 
+
  }
 
  $(function () {
@@ -317,7 +317,7 @@ if ($ldap_search) {
 
 
 </script>
-     
+
 <div class="container">
  <div class="col-sm-7">
 
@@ -333,7 +333,7 @@ if ($ldap_search) {
       <input type="hidden" name="update_account">
       <input type="hidden" id="pass_score" value="0" name="pass_score">
       <input type="hidden" name="username" value="<?php print $username; ?>">
-     
+
 
 <?php
 
@@ -384,7 +384,7 @@ if ($ldap_search) {
 
 <div class="container">
  <div class="col-sm-12">
- 
+
   <div class="panel panel-default">
    <div class="panel-heading clearfix">
     <h3 class="panel-title pull-left" style="padding-top: 7.5px;">Group membership</h3>

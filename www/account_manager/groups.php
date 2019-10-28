@@ -2,7 +2,7 @@
 
 include_once __DIR__ . "/../includes/web_functions.inc.php";
 include_once __DIR__ . "/../includes/ldap_functions.inc.php";
-include_once __DIR__ . "/../includes/module_functions.inc.php";
+include_once __DIR__ . "/../account_manager/module_functions.inc.php";
 set_page_access("admin");
 
 render_header("LDAP manager");
@@ -11,7 +11,7 @@ render_submenu();
 $ldap_connection = open_ldap_connection();
 
 if (isset($_POST['delete_group'])) {
- 
+
  ?>
  <script>
     window.setTimeout(function() {
@@ -19,12 +19,12 @@ if (isset($_POST['delete_group'])) {
                                  }, 4000);
  </script>
  <?php
- 
+
  $this_group = $_POST['delete_group'];
  if (preg_match("/$USERNAME_REGEX/",$this_group)) {
- 
+
   $del_group = ldap_delete_group($ldap_connection,$this_group);
-  
+
   if ($del_group) {
   ?>
   <div class="alert alert-success" role="alert">
@@ -55,26 +55,26 @@ render_js_username_check();
 <script type="text/javascript">
 
  function show_new_group_form() {
- 
+
   group_form = document.getElementById('group_name');
   group_submit = document.getElementById('add_group');
   group_form.classList.replace('invisible','visible');
   group_submit.classList.replace('invisible','visible');
-  
-  
+
+
  }
 
 </script>
 <div class="container">
 
- <div class="form-inline" id="new_group_div"> 
+ <div class="form-inline" id="new_group_div">
   <form action="/<?php print $THIS_MODULE_PATH; ?>/show_group.php" method="post">
    <input type="hidden" name="new_group">
    <button id="show_new_group" class="form-control btn btn-default" type="button" onclick="show_new_group_form();">New group</button>
    <input type="text" class="form-control invisible" name="group_name" id="group_name" placeholder="Group name" onkeyup="check_entity_name_validity(document.getElementById('group_name').value,'new_group_div');"><button id="add_group" class="form-control btn btn-primary btn-sm invisible" type="submit">Add</button>
   </form>
  </div>
- 
+
  <table class="table table-striped">
   <thead>
    <tr>

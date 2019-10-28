@@ -2,7 +2,7 @@
 
 include_once __DIR__ . "/../includes/web_functions.inc.php";
 include_once __DIR__ . "/../includes/ldap_functions.inc.php";
-include_once __DIR__ . "/../includes/module_functions.inc.php";
+include_once __DIR__ . "/../account_manager/module_functions.inc.php";
 set_page_access("admin");
 
 render_header("LDAP manager");
@@ -11,7 +11,7 @@ render_submenu();
 $ldap_connection = open_ldap_connection();
 
 if (isset($_POST['delete_user'])) {
- 
+
  ?>
  <script>
     window.setTimeout(function() {
@@ -19,12 +19,12 @@ if (isset($_POST['delete_user'])) {
                                  }, 4000);
  </script>
  <?php
- 
+
  $this_user = $_POST['delete_user'];
  if (preg_match("/$USERNAME_REGEX/",$this_user)) {
- 
+
   $del_user = ldap_delete_account($ldap_connection,$this_user);
-  
+
   if ($del_user) {
   ?>
   <div class="alert alert-success" role="alert">

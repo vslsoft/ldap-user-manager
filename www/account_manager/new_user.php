@@ -2,14 +2,14 @@
 
 include_once __DIR__ . "/../includes/web_functions.inc.php";
 include_once __DIR__ . "/../includes/ldap_functions.inc.php";
-include_once __DIR__ . "/../includes/module_functions.inc.php";
+include_once __DIR__ . "/../account_manager/module_functions.inc.php";
 
 if ( $_POST['setup_admin_account'] ) {
  $admin_setup = TRUE;
- 
+
  validate_setup_cookie();
  set_page_access("setup");
- 
+
  $completed_action="/log_in";
  $page_title="New administrator account";
 
@@ -40,7 +40,7 @@ if (isset($_POST['create_account'])) {
  $last_name = stripslashes($_POST['last_name']);
  $username = stripslashes($_POST['username']);
  $password = $_POST['password'];
- 
+
  if ($_POST['email']) { $email = stripslashes($_POST['email']); }
 
 

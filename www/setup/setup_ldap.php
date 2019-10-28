@@ -2,7 +2,7 @@
 
 include_once __DIR__ . "/../includes/web_functions.inc.php";
 include_once __DIR__ . "/../includes/ldap_functions.inc.php";
-include_once __DIR__ . "/../account_manager/module_functions.inc.php";
+include_once __DIR__ . "/module_functions.inc.php";
 
 validate_setup_cookie();
 set_page_access("setup");
