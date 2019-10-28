@@ -2,7 +2,7 @@
 
 include_once __DIR__ . "/../includes/web_functions.inc.php";
 include_once __DIR__ . "/../includes/ldap_functions.inc.php";
-include_once __DIR__ . "/../includes/module_functions.inc.php";
+include_once __DIR__ . "/../account_manager/module_functions.inc.php";
 
 validate_setup_cookie();
 set_page_access("setup");
@@ -20,7 +20,7 @@ if (isset($_POST['fix_problems'])) {
 ?>
 <script>
     $(document).ready(function(){
-     $('[data-toggle="popover"]').popover(); 
+     $('[data-toggle="popover"]').popover();
     });
 </script>
 <div class='container'>
@@ -103,7 +103,7 @@ if (isset($_POST['fix_problems'])) {
  if (isset($_POST['setup_default_group'])) {
 
   $group_add = ldap_new_group($ldap_connection,$DEFAULT_USER_GROUP);
-  
+
   if ($group_add == TRUE) {
    print "$li_good Created default group: <strong>$DEFAULT_USER_GROUP</strong></li>\n";
   }
@@ -117,7 +117,7 @@ if (isset($_POST['fix_problems'])) {
  if (isset($_POST['setup_admins_group'])) {
 
   $group_add = ldap_new_group($ldap_connection,$LDAP['admins_group']);
-  
+
   if ($group_add == TRUE) {
    print "$li_good Created LDAP administrators group: <strong>${LDAP['admins_group']}</strong></li>\n";
   }
@@ -175,10 +175,10 @@ if (isset($_POST['fix_problems'])) {
      <input type='submit' class="btn btn-warning center-block" value='Create new account >' class='center-block'>
     </form>
   </div>
-  <?php 
+  <?php
   }
  }
- else { 
+ else {
  ?>
  <div class='well'>
   <form action="/setup/run_checks.php">
